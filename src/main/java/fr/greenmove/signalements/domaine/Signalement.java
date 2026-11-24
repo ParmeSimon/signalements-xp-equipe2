@@ -40,3 +40,4 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         return null;
     }
 }
+
