@@ -44,9 +44,9 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
 
     /** S4 : un signalement pris ne peut pas être pris par un autre technicien. */
     public Signalement prendre(String technicien) {
-        /*if (!estLibre()) {
+        if (!estLibre()) {
             throw new SignalementInvalide("Signalement déjà pris par " + prisPar);
-        }*/
+        }
         return new Signalement(id, vehicule, categorie, commentaire, signaleLe, technicien);
     }
 
