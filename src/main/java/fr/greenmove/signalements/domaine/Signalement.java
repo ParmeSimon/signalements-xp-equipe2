@@ -47,7 +47,7 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         if (!estLibre()) {
             throw new SignalementInvalide("Signalement déjà pris par " + prisPar);
         }
-        return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null);
+        return new Signalement(id, vehicule, categorie, commentaire, signaleLe, technicien);
     }
 
     /** S4 : le technicien relâche le signalement qu'il ne peut pas traiter, qui redevient libre. */
