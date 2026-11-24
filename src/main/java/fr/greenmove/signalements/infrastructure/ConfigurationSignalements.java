@@ -1,6 +1,8 @@
 package fr.greenmove.signalements.infrastructure;
 
 import fr.greenmove.signalements.application.SignalerIncident;
+import fr.greenmove.signalements.domaine.Notifications;
+import fr.greenmove.signalements.domaine.Pool;
 import fr.greenmove.signalements.domaine.Signalements;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +24,17 @@ public class ConfigurationSignalements {
     }
 
     @Bean
-    SignalerIncident signalerIncident(Signalements signalements, Clock horloge) {
-        return new SignalerIncident(signalements, horloge);
+    Pool pool() {
+        return new PoolEnMemoire();
+    }
+
+    @Bean
+    Notifications notifications() {
+        return new NotificationsJournalisees();
+    }
+
+    @Bean
+    SignalerIncident signalerIncident(Signalements signalements, Pool pool, Notifications notifications, Clock horloge) {
+        return new SignalerIncident(signalements, pool, notifications, horloge);
     }
 }
