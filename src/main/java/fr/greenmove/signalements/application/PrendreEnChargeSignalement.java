@@ -22,6 +22,6 @@ public class PrendreEnChargeSignalement {
     }
 
     private Signalement trouver(String idDuSignalement) {
-        return signalements.parId(idDuSignalement).orElseThrow();   // sabotage temporaire
+        return signalements.parId(idDuSignalement).orElseThrow(() -> new SignalementInvalide("Signalement introuvable : " + idDuSignalement));
     }
 }
