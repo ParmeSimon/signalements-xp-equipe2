@@ -1,5 +1,6 @@
 package fr.greenmove.signalements.infrastructure;
 
+import fr.greenmove.signalements.application.PrendreEnChargeSignalement;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.application.VoirSignalementsOuverts;
 import fr.greenmove.signalements.domaine.Notifications;
@@ -42,5 +43,10 @@ public class ConfigurationSignalements {
     @Bean
     VoirSignalementsOuverts voirSignalementsOuverts(Signalements signalements) {
         return new VoirSignalementsOuverts(signalements);
+    }
+
+    @Bean
+    PrendreEnChargeSignalement prendreEnChargeSignalement(Signalements signalements) {
+        return new PrendreEnChargeSignalement(signalements);
     }
 }
