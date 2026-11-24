@@ -52,6 +52,6 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
 
     /** S4 : le technicien relâche le signalement qu'il ne peut pas traiter, qui redevient libre. */
     public Signalement relacher() {
-        return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null);
+        return this;
     }
 }

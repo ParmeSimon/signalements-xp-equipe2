@@ -88,4 +88,14 @@ class SignalementTest {
                 .isInstanceOf(SignalementInvalide.class)
                 .hasMessage("Signalement déjà pris par Karim");
     }
+
+    @Test
+    void un_signalement_relache_redevient_libre() {
+        Signalement prisParKarim = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT).prendre("Karim");
+
+        Signalement relache = prisParKarim.relacher();
+
+        assertThat(relache.estLibre()).isTrue();
+        assertThat(relache.prisPar()).isNull();
+    }
 }
