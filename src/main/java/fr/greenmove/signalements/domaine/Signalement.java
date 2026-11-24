@@ -31,4 +31,12 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
     public Gravite gravite() {
         return categorie.gravite();
     }
+
+    public boolean estLibre() {
+        return false;
+    }
+
+    public String prisPar() {
+        return null;
+    }
 }

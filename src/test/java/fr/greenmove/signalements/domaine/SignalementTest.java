@@ -62,4 +62,11 @@ class SignalementTest {
                 .isInstanceOf(SignalementInvalide.class)
                 .hasMessage("Le commentaire dépasse 500 caractères");
     }
+
+    @Test
+    void un_nouveau_signalement_est_libre() {
+        Signalement signalement = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT);
+
+        assertThat(signalement.estLibre()).isTrue();
+    }
 }
