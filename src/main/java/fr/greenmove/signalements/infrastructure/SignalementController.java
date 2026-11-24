@@ -1,5 +1,6 @@
 package fr.greenmove.signalements.infrastructure;
 
+import fr.greenmove.signalements.application.PrendreEnChargeSignalement;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Signalement;
@@ -23,22 +24,30 @@ import java.util.Map;
 public class SignalementController {
 
     private final SignalerIncident signalerIncident;
+    private final PrendreEnChargeSignalement prendreEnChargeSignalement;
     private final Signalements signalements;
 
-    public SignalementController(SignalerIncident signalerIncident, Signalements signalements) {
+    public SignalementController(SignalerIncident signalerIncident,
+                                 PrendreEnChargeSignalement prendreEnChargeSignalement,
+                                 Signalements signalements) {
         this.signalerIncident = signalerIncident;
+        this.prendreEnChargeSignalement = prendreEnChargeSignalement;
         this.signalements = signalements;
     }
 
     public record NouveauSignalement(String vehicule, String categorie, String commentaire) {
     }
 
+    /** S4 : le corps JSON d'une prise en charge, {"technicien": "Karim"}. */
+    public record PriseEnCharge(String technicien) {
+    }
+
     public record SignalementVue(String id, String vehicule, String categorie, String gravite,
-                                 String commentaire, String signaleLe) {
+                                 String commentaire, String signaleLe, String prisPar) {
 
         static SignalementVue de(Signalement s) {
             return new SignalementVue(s.id(), s.vehicule(), s.categorie().name(), s.gravite().name(),
-                    s.commentaire(), s.signaleLe().toString());
+                    s.commentaire(), s.signaleLe().toString(), s.prisPar());
         }
     }
 
@@ -58,6 +67,13 @@ public class SignalementController {
     @GetMapping("/{id}")
     public ResponseEntity<SignalementVue> parId(@PathVariable String id) {
         return ResponseEntity.of(signalements.parId(id).map(SignalementVue::de));
+    }
+
+    /** S4 : un technicien prend en charge le signalement. */
+    @PostMapping("/{id}/prise-en-charge")
+    public SignalementVue prendreEnCharge(@PathVariable String id, @RequestBody PriseEnCharge demande) {
+        prendreEnChargeSignalement.prendre(id, demande.technicien());
+        return SignalementVue.de(signalements.parId(id).orElseThrow());
     }
 
     @ExceptionHandler(SignalementInvalide.class)

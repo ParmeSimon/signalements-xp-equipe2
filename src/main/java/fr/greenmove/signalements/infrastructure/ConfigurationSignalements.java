@@ -1,5 +1,6 @@
 package fr.greenmove.signalements.infrastructure;
 
+import fr.greenmove.signalements.application.PrendreEnChargeSignalement;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.domaine.Notifications;
 import fr.greenmove.signalements.domaine.Pool;
@@ -36,5 +37,10 @@ public class ConfigurationSignalements {
     @Bean
     SignalerIncident signalerIncident(Signalements signalements, Pool pool, Notifications notifications, Clock horloge) {
         return new SignalerIncident(signalements, pool, notifications, horloge);
+    }
+
+    @Bean
+    PrendreEnChargeSignalement prendreEnChargeSignalement(Signalements signalements) {
+        return new PrendreEnChargeSignalement(signalements);
     }
 }
