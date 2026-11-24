@@ -32,3 +32,4 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         return categorie.gravite();
     }
 }
+
