@@ -56,3 +56,4 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null);
     }
 }
+
