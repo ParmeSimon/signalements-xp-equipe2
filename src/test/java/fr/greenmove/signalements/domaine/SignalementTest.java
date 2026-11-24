@@ -79,4 +79,13 @@ class SignalementTest {
         assertThat(pris.prisPar()).isEqualTo("Karim");
         assertThat(pris.estLibre()).isFalse();
     }
+
+    @Test
+    void un_signalement_pris_ne_peut_pas_etre_pris_par_un_autre_technicien() {
+        Signalement prisParKarim = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT).prendre("Karim");
+
+        assertThatThrownBy(() -> prisParKarim.prendre("Julie"))
+                .isInstanceOf(SignalementInvalide.class)
+                .hasMessage("Signalement déjà pris par Karim");
+    }
 }
