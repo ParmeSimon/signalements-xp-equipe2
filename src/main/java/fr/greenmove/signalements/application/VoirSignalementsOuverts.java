@@ -3,7 +3,6 @@ package fr.greenmove.signalements.application;
 import fr.greenmove.signalements.domaine.Gravite;
 import fr.greenmove.signalements.domaine.Signalement;
 import fr.greenmove.signalements.domaine.Signalements;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Comparator;
 import java.util.List;

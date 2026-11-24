@@ -30,16 +30,14 @@ class RetraitDuPoolIntegrationTest {
     Pool pool;
 
     @MockitoBean
-    Notifications notifications;   // remplace le vrai bean par un mock qu'on peut vérifier
+    Notifications notifications;
 
     @Test
     void un_signalement_bloquant_en_http_retire_le_vehicule_et_arrete_l_usager() throws Exception {
-        // Préparer : un véhicule en cours d'utilisation dans le VRAI pool de l'appli
         Vehicule velo = Vehicule.creer("V-0777", Instant.now());
         velo.affecter(Trajet.demarre(new Usager("U-12"), "V-0777", Instant.now()), Instant.now());
         ((PoolEnMemoire) pool).ajouter(velo);
 
-        // Agir : passer par l'API HTTP, comme le ferait l'appli mobile
         mockMvc.perform(post("/signalements")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -48,7 +46,6 @@ class RetraitDuPoolIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.gravite").value("BLOQUANT"));
 
-        // Vérifier : tout le câblage Spring a fonctionné
         assertThat(pool.parNumero("V-0777")).isNull();
         verify(notifications).demanderArret(new Usager("U-12"), "V-0777");
     }

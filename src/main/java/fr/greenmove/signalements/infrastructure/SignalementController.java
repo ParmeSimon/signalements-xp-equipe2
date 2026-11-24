@@ -1,6 +1,7 @@
 package fr.greenmove.signalements.infrastructure;
 
 import fr.greenmove.signalements.application.SignalerIncident;
+import fr.greenmove.signalements.application.VoirSignalementsOuverts;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Signalement;
 import fr.greenmove.signalements.domaine.SignalementInvalide;
@@ -23,10 +24,13 @@ import java.util.Map;
 public class SignalementController {
 
     private final SignalerIncident signalerIncident;
+    private final VoirSignalementsOuverts voirSignalementsOuverts;
     private final Signalements signalements;
 
-    public SignalementController(SignalerIncident signalerIncident, Signalements signalements) {
+    public SignalementController(SignalerIncident signalerIncident, VoirSignalementsOuverts voirSignalementsOuverts,
+                                 Signalements signalements) {
         this.signalerIncident = signalerIncident;
+        this.voirSignalementsOuverts = voirSignalementsOuverts;
         this.signalements = signalements;
     }
 
@@ -53,6 +57,12 @@ public class SignalementController {
     @GetMapping
     public List<SignalementVue> tous() {
         return signalements.tous().stream().map(SignalementVue::de).toList();
+    }
+
+    /** S3 – Les signalements ouverts : bloquants, puis gênants, puis cosmétiques ; le plus ancien d'abord. */
+    @GetMapping("/ouverts")
+    public List<SignalementVue> ouverts() {
+        return voirSignalementsOuverts.lister().stream().map(SignalementVue::de).toList();
     }
 
     @GetMapping("/{id}")
