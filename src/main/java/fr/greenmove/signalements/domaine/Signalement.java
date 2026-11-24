@@ -40,7 +40,7 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
 
     /** S4 : un signalement est libre tant qu'aucun technicien ne l'a pris. */
     public boolean estLibre() {
-        return prisPar == null;
+        return prisPar != null;
     }
 
     /** S4 : un signalement pris ne peut pas être pris par un autre technicien. */
