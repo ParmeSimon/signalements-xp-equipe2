@@ -7,8 +7,7 @@ import java.util.regex.Pattern;
  * Un incident signalé sur un véhicule.
  * Véhicules notés V-0412 pour un vélo, T-1187 pour une trottinette.
  */
-public record Signalement(String id, String vehicule, Categorie categorie, String commentaire, Instant signaleLe,
-                          String prisPar) {
+public record Signalement(String id, String vehicule, Categorie categorie, String commentaire, Instant signaleLe, String prisPar) {
 
     private static final Pattern NUMERO_DE_VEHICULE = Pattern.compile("[VT]-\\d{4}");
     public static final int LONGUEUR_MAX_DU_COMMENTAIRE = 500;
@@ -48,7 +47,7 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         if (!estLibre()) {
             throw new SignalementInvalide("Signalement déjà pris par " + prisPar);
         }
-        return new Signalement(id, vehicule, categorie, commentaire, signaleLe, technicien);
+        return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null);
     }
 
     /** S4 : le technicien relâche le signalement qu'il ne peut pas traiter, qui redevient libre. */
@@ -56,4 +55,3 @@ public record Signalement(String id, String vehicule, Categorie categorie, Strin
         return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null);
     }
 }
-

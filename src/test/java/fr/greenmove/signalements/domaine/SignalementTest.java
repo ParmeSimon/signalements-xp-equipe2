@@ -69,4 +69,14 @@ class SignalementTest {
 
         assertThat(signalement.estLibre()).isTrue();
     }
+
+    @Test
+    void le_technicien_qui_prend_un_signalement_voit_son_nom_dessus() {
+        Signalement signalement = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT);
+
+        Signalement pris = signalement.prendre("Karim");
+
+        assertThat(pris.prisPar()).isEqualTo("Karim");
+        assertThat(pris.estLibre()).isFalse();
+    }
 }
