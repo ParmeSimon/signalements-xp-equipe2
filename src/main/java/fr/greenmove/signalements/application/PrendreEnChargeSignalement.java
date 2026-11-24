@@ -14,7 +14,7 @@ public class PrendreEnChargeSignalement {
     }
 
     public void prendre(String idDuSignalement, String technicien) {
-        signalements.enregistrer(trouver(idDuSignalement).prendre(technicien));
+        trouver(idDuSignalement).prendre(technicien);
     }
 
     public void relacher(String idDuSignalement) {
