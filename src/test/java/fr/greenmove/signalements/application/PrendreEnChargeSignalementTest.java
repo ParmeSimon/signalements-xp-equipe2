@@ -3,12 +3,16 @@ package fr.greenmove.signalements.application;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Signalement;
 import fr.greenmove.signalements.infrastructure.SignalementsEnMemoire;
+import fr.greenmove.signalements.domaine.SignalementInvalide;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PrendreEnChargeSignalementTest {
 
@@ -27,5 +31,12 @@ class PrendreEnChargeSignalementTest {
         prendreEnCharge.prendre("1", "Karim");
 
         assertThat(signalements.parId("1").orElseThrow().prisPar()).isEqualTo("Karim");
+    }
+
+    @Test
+    void un_signalement_inconnu_est_refuse() {
+        assertThatThrownBy(() -> prendreEnCharge.prendre("inconnu", "Karim"))
+                .isInstanceOf(SignalementInvalide.class)
+                .hasMessage("Signalement introuvable : inconnu");
     }
 }
