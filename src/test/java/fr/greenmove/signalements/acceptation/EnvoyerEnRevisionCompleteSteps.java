@@ -1,6 +1,7 @@
 package fr.greenmove.signalements.acceptation;
 
 import fr.greenmove.signalements.application.EnvoyerEnRevisionComplete;
+import fr.greenmove.signalements.application.RemettreEnService;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Vehicule;
@@ -30,6 +31,13 @@ public class EnvoyerEnRevisionCompleteSteps {
         Clock horloge = Clock.fixed(Instant.parse(dateIso), ZoneOffset.UTC);
         new SignalerIncident(signalements, horloge)
                 .signaler(vehicule, Categorie.de(categorie), null);
+    }
+
+    @Given("l'incident {string} sur le véhicule {string} est réparé par le technicien {string} le {string}")
+    public void l_incident_est_repare_par_le_technicien_le(String categorie, String vehicule, String technicien, String dateIso) {
+        Clock horloge = Clock.fixed(Instant.parse(dateIso), ZoneOffset.UTC);
+        new RemettreEnService(signalements, pool, horloge)
+                .remettreEnService(vehicule, technicien, "Réparation effectuée");
     }
 
     @When("un usager signale {string} sur le véhicule {string} le {string}")

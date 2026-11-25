@@ -27,7 +27,8 @@ public class RemettreEnServiceSteps {
 
     private final SignalementsEnMemoire signalements = new SignalementsEnMemoire();
     private final PoolEnMemoire pool = new PoolEnMemoire();
-    private final RemettreEnService remettreEnService = new RemettreEnService(signalements, pool);
+    private final Clock horloge = Clock.fixed(Instant.parse("2026-11-23T12:00:00Z"), ZoneOffset.UTC);
+    private final RemettreEnService remettreEnService = new RemettreEnService(signalements, pool, horloge);
     private final PrendreEnChargeSignalement prendreEnCharge = new PrendreEnChargeSignalement(signalements);
 
     @Given("un véhicule {string} indisponible à la location")

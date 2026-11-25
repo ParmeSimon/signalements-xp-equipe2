@@ -49,8 +49,8 @@ public class ConfigurationSignalements {
     }
 
     @Bean
-    RemettreEnService remettreEnService(Signalements signalements, Pool pool) {
-        return new RemettreEnService(signalements, pool);
+    RemettreEnService remettreEnService(Signalements signalements, Pool pool, Clock horloge) {
+        return new RemettreEnService(signalements, pool, horloge);
     }
 
     @Bean

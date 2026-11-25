@@ -7,16 +7,19 @@ import fr.greenmove.signalements.infrastructure.PoolEnMemoire;
 import fr.greenmove.signalements.infrastructure.SignalementsEnMemoire;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import java.time.ZoneOffset;
 
 class RemettreEnServiceTest {
 
     private final SignalementsEnMemoire signalements = new SignalementsEnMemoire();
     private final PoolEnMemoire pool = new PoolEnMemoire();
-    private final RemettreEnService useCase = new RemettreEnService(signalements, pool);
+    private final Clock horloge = Clock.fixed(Instant.parse("2026-11-23T12:00:00Z"), ZoneOffset.UTC);
+    private final RemettreEnService useCase = new RemettreEnService(signalements, pool, horloge);
 
     @Test
     void ne_clot_que_les_signalements_du_vehicule_concerne() {
