@@ -77,6 +77,15 @@ public class ConsulterHistoriqueVehiculeTest {
 
     @Test
     void un_incident_pris_en_charge_reste_dans_l_historique() {
+        // Karim prend en charge le signalement "1" (FREINS sur V-0412)
+        Signalement pris = signalements.parId("1").orElseThrow().prendre("Karim");
+        signalements.enregistrer(pris);
 
+        List<String> idsDansLHistorique = consulterHistorique.de("V-0412").stream()
+                .map(Signalement::id)
+                .toList();
+
+        assertEquals(List.of("3", "1"), idsDansLHistorique);
+        assertEquals("Karim", consulterHistorique.de("V-0412").get(1).prisPar());
     }
 }

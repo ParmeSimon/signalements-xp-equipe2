@@ -18,6 +18,7 @@ public class ConsulterHistoriqueVehicule {
     public List<Signalement> de(String vehicule) {
         return signalements.tous().stream()                                   // tous les signalements
                 .filter(s -> s.vehicule().equals(vehicule))
+                .filter(Signalement::estLibre)          // ← temporaire : cache les incidents pris
                 .sorted(Comparator.comparing(Signalement::signaleLe).reversed())
                 .toList();
     }
