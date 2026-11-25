@@ -1,12 +1,14 @@
 package fr.greenmove.signalements.infrastructure;
 
 import fr.greenmove.signalements.application.PrendreEnChargeSignalement;
+import fr.greenmove.signalements.application.RemettreEnService;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.application.VoirSignalementsOuverts;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Signalement;
 import fr.greenmove.signalements.domaine.SignalementInvalide;
 import fr.greenmove.signalements.domaine.Signalements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,15 +29,19 @@ public class SignalementController {
     private final SignalerIncident signalerIncident;
     private final VoirSignalementsOuverts voirSignalementsOuverts;
     private final PrendreEnChargeSignalement prendreEnChargeSignalement;
+    private final RemettreEnService remettreEnService;
     private final Signalements signalements;
 
+    @Autowired
     public SignalementController(SignalerIncident signalerIncident,
                                  VoirSignalementsOuverts voirSignalementsOuverts,
                                  PrendreEnChargeSignalement prendreEnChargeSignalement,
+                                 RemettreEnService remettreEnService,
                                  Signalements signalements) {
         this.signalerIncident = signalerIncident;
         this.voirSignalementsOuverts = voirSignalementsOuverts;
         this.prendreEnChargeSignalement = prendreEnChargeSignalement;
+        this.remettreEnService = remettreEnService;
         this.signalements = signalements;
     }
 
@@ -46,12 +52,18 @@ public class SignalementController {
     public record PriseEnCharge(String technicien) {
     }
 
+    /** S5 : le corps JSON d'une remise en service, {"technicien": "Bob", "commentaire": "..."}. */
+    public record RemiseEnServiceDemande(String technicien, String commentaire) {
+    }
+
     public record SignalementVue(String id, String vehicule, String categorie, String gravite,
-                                 String commentaire, String signaleLe, String prisPar) {
+                                 String commentaire, String signaleLe, String prisPar,
+                                 boolean clos, String commentaireCloture) {
 
         static SignalementVue de(Signalement s) {
             return new SignalementVue(s.id(), s.vehicule(), s.categorie().name(), s.gravite().name(),
-                    s.commentaire(), s.signaleLe().toString(), s.prisPar());
+                    s.commentaire(), s.signaleLe().toString(), s.prisPar(),
+                    s.clos(), s.commentaireCloture());
         }
     }
 
@@ -86,8 +98,16 @@ public class SignalementController {
         return SignalementVue.de(signalements.parId(id).orElseThrow());
     }
 
+    /** S5 : remet en service un véhicule et clôt tous ses signalements ouverts. */
+    @PostMapping("/vehicules/{vehicule}/remise-en-service")
+    public ResponseEntity<Void> remettreEnService(@PathVariable String vehicule,
+                                                  @RequestBody RemiseEnServiceDemande demande) {
+        remettreEnService.remettreEnService(vehicule, demande.technicien(), demande.commentaire());
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(SignalementInvalide.class)
-    ResponseEntity<Map<String, String>> refuser(SignalementInvalide e) {
+    ResponseEntity<?> refuser(SignalementInvalide e) {
         return ResponseEntity.badRequest().body(Map.of("erreur", e.getMessage()));
     }
 }
