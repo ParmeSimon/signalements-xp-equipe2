@@ -7,7 +7,6 @@ import fr.greenmove.signalements.domaine.Signalements;
 import fr.greenmove.signalements.domaine.Vehicule;
 
 import java.time.Instant;
-import java.util.List;
 
 /** S5 – Remettre en service un véhicule et clore tous ses signalements ouverts. */
 public class RemettreEnService {
@@ -25,32 +24,25 @@ public class RemettreEnService {
             throw new SignalementInvalide("Le commentaire de réparation est obligatoire");
         }
 
-        List<Signalement> tous = signalements.tous();
-        for (int i = 0; i < tous.size(); i++) {
-            Signalement s = tous.get(i);
-            if (s.vehicule().equals(vehicule) && !s.clos()) {
-                Signalement clos = new Signalement(
-                        s.id(),
-                        s.vehicule(),
-                        s.categorie(),
-                        s.commentaire(),
-                        s.signaleLe(),
-                        technicien,
-                        true,
-                        commentaire.strip()
-                );
-                signalements.enregistrer(clos);
-            }
-        }
+        signalements.tous().stream()
+                .filter(s -> s.vehicule().equals(vehicule))
+                .filter(Signalement::estOuvert)
+                .map(s -> s.clore(technicien, commentaire))
+                .forEach(signalements::enregistrer);
 
-        if (pool != null) {
-            Vehicule v = pool.parNumero(vehicule);
-            if (v == null) {
-                v = Vehicule.creer(vehicule, Instant.now());
-            } else {
-                v.reactiver(Instant.now());
-            }
-            pool.ajouter(v);
+        reintegrerDansLePool(vehicule);
+    }
+
+    private void reintegrerDansLePool(String vehicule) {
+        if (pool == null) {
+            return;
         }
+        Vehicule v = pool.parNumero(vehicule);
+        if (v == null) {
+            v = Vehicule.creer(vehicule, Instant.now());
+        } else {
+            v.reactiver(Instant.now());
+        }
+        pool.ajouter(v);
     }
 }

@@ -64,4 +64,25 @@ public record Signalement(
     public Signalement relacher() {
         return new Signalement(id, vehicule, categorie, commentaire, signaleLe, null, clos, commentaireCloture);
     }
+
+    public boolean estOuvert() {
+        return !clos;
+    }
+
+    /** S5 : clôt le signalement avec le technicien et le commentaire de réparation. */
+    public Signalement clore(String technicien, String commentaireReparation) {
+        if (commentaireReparation == null || commentaireReparation.isBlank()) {
+            throw new SignalementInvalide("Le commentaire de réparation est obligatoire");
+        }
+        return new Signalement(
+                id,
+                vehicule,
+                categorie,
+                commentaire,
+                signaleLe,
+                technicien,
+                true,
+                commentaireReparation.strip()
+        );
+    }
 }
