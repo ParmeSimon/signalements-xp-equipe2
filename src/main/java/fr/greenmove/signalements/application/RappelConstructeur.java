@@ -2,6 +2,7 @@ package fr.greenmove.signalements.application;
 
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Pool;
+import fr.greenmove.signalements.domaine.SignalementInvalide;
 
 /** S21 – Retirer d'un coup de la location les trottinettes d'une série rappelée par le constructeur. */
 public class RappelConstructeur {
@@ -18,6 +19,9 @@ public class RappelConstructeur {
 
     /** @param serie début du numéro des trottinettes rappelées, par exemple "T-11" pour les T-11xx */
     public void rappeler(String serie) {
+        if (serie == null || serie.isBlank()) {
+            throw new SignalementInvalide("La série est obligatoire");
+        }
         pool.tous().stream()
                 .filter(vehicule -> vehicule.numero().startsWith(serie))
                 .forEach(vehicule -> signalerIncident.signaler(
