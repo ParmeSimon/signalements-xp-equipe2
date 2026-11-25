@@ -15,6 +15,7 @@ import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConsulterHistoriqueVehiculeTest {
@@ -32,11 +33,12 @@ public class ConsulterHistoriqueVehiculeTest {
     @BeforeEach
     void un_signalement_existe() {
         signalements.enregistrer(new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT));
+        signalements.enregistrer(new Signalement("2", "V-0999", Categorie.RAYURE, "", MAINTENANT));
+        signalements.enregistrer(new Signalement("3", "V-0412", Categorie.RAYURE, "", MAINTENANT));
         Vehicule vehicule1 = Vehicule.creer("V-0412", CREATION);
         Vehicule vehicule2 = Vehicule.creer("V-0999", CREATION);
         pool.ajouter(vehicule1);
         pool.ajouter(vehicule2);
-
     }
 
     @Test
@@ -45,7 +47,9 @@ public class ConsulterHistoriqueVehiculeTest {
     }
 
     @Test
-    void l_historique_ne_contient_que_les_incidents_du_vehicule_demande(){}
+    void l_historique_ne_contient_que_les_incidents_du_vehicule_demande() {
+        assertEquals(signalements.parVehicule("V-0412").size(), 1);
+    }
 
     @Test
     void l_historique_va_du_plus_recent_au_plus_ancien(){}
