@@ -1,5 +1,6 @@
 package fr.greenmove.signalements.acceptation;
 
+import fr.greenmove.signalements.application.EnvoyerEnRevisionComplete;
 import fr.greenmove.signalements.application.SignalerIncident;
 import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Vehicule;
@@ -34,6 +35,8 @@ public class EnvoyerEnRevisionCompleteSteps {
     @When("un usager signale {string} sur le véhicule {string} le {string}")
     public void un_usager_signale_sur_le_vehicule_le(String categorie, String vehicule, String dateIso) {
         Clock horloge = Clock.fixed(Instant.parse(dateIso), ZoneOffset.UTC);
+        new EnvoyerEnRevisionComplete(signalements, pool, horloge)
+                .signaler(vehicule, Categorie.de(categorie), null);
     }
 
     @Then("le véhicule {string} est retiré du pool et pars en révision complète")
@@ -45,6 +48,11 @@ public class EnvoyerEnRevisionCompleteSteps {
     @Then("le véhicule {string} reste disponible dans le pool")
     public void le_vehicule_reste_disponible_dans_le_pool(String vehicule) {
         assertThat(pool.contient(vehicule)).isTrue();
+        assertThat(pool.estEnRevisionComplete(vehicule)).isFalse();
+    }
+
+    @Then("le véhicule {string} n'est pas envoyé en révision complète")
+    public void le_vehicule_n_est_pas_envoye_en_revision_complete(String vehicule) {
         assertThat(pool.estEnRevisionComplete(vehicule)).isFalse();
     }
 }

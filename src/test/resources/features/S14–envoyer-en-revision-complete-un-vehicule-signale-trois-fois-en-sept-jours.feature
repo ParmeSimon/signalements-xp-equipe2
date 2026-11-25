@@ -27,7 +27,7 @@ Fonctionnalité: S14 – Envoyer en révision complète un véhicule signalé tr
     Et le véhicule "V-0412" n'est pas envoyé en révision complète
 
   Scénario: Le seuil de trois signalements est calculé indépendamment par véhicule
-    Étant donné un véhicule "V-0412" disponible dans le pool
+    Étant donné un véhicule "V-0412" en service dans le pool
     Et un véhicule "T-1187" disponible dans le pool
     Et un incident "PROPRETE" signalé sur le véhicule "V-0412" le "2026-11-22T10:00:00Z"
     Et un incident "RAYURE" signalé sur le véhicule "T-1187" le "2026-11-23T10:00:00Z"

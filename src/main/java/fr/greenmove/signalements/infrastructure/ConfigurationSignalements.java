@@ -57,4 +57,9 @@ public class ConfigurationSignalements {
     ConsulterHistoriqueVehicule consulterHistoriqueVehicule(Signalements signalements) {
         return new ConsulterHistoriqueVehicule(signalements);
     }
+
+    @Bean
+    EnvoyerEnRevisionComplete envoyerEnRevisionComplete(Signalements signalements, Pool pool, Clock horloge) {
+        return new EnvoyerEnRevisionComplete(signalements, pool, horloge);
+    }
 }
