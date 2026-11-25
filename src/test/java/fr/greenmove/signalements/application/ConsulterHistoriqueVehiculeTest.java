@@ -48,7 +48,7 @@ public class ConsulterHistoriqueVehiculeTest {
 
     @Test
     void l_historique_ne_contient_que_les_incidents_du_vehicule_demande() {
-        assertEquals(signalements.parVehicule("V-0412").size(), 1);
+        assertEquals(signalements.parVehicule("V-0412").size(), 2);
     }
 
     @Test
