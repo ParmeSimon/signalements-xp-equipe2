@@ -19,4 +19,31 @@ public class RemettreEnService {
         this.pool = pool;
     }
 
+    public void remettreEnService(String vehicule, String technicien, String commentaire) {
+        if (commentaire == null || commentaire.isBlank()) {
+            throw new SignalementInvalide("Le commentaire de réparation est obligatoire");
+        }
+
+        signalements.tous().stream()
+                .filter(s -> s.vehicule().equals(vehicule))
+                .filter(Signalement::estOuvert)
+                .map(s -> s.clore(technicien, commentaire))
+                .forEach(signalements::enregistrer);
+
+        reintegrerDansLePool(vehicule);
+    }
+
+    private void reintegrerDansLePool(String vehicule) {
+        if (pool == null) {
+            return;
+        }
+        Vehicule v = pool.parNumero(vehicule);
+        if (v == null) {
+            v = Vehicule.creer(vehicule, Instant.now());
+        } else {
+            v.reactiver(Instant.now());
+        }
+        pool.ajouter(v);
+    }
+
 }
