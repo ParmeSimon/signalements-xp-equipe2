@@ -12,4 +12,8 @@ public interface Pool {
 
     /* S21 : une copie des véhicules du pool, qu'on peut parcourir en retirant des véhicules. */
     List<Vehicule> tous();
+
+    void envoyerEnRevisionComplete(String vehicule);
+
+    boolean estEnRevisionComplete(String vehicule);
 }
