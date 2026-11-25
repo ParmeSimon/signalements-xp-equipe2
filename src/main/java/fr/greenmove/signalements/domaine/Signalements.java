@@ -10,5 +10,7 @@ public interface Signalements {
 
     Optional<Signalement> parId(String id);
 
+    List<Signalement> parVehicule(String vehicule);
+
     List<Signalement> tous();
 }

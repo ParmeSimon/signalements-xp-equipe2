@@ -13,6 +13,7 @@ import java.util.Optional;
 public class SignalementsEnMemoire implements Signalements {
 
     private final Map<String, Signalement> parId = new LinkedHashMap<>();
+    private final Map<String, Signalement> parVehicule = new LinkedHashMap<>();
 
     @Override
     public synchronized void enregistrer(Signalement signalement) {
@@ -22,6 +23,13 @@ public class SignalementsEnMemoire implements Signalements {
     @Override
     public synchronized Optional<Signalement> parId(String id) {
         return Optional.ofNullable(parId.get(id));
+    }
+
+    @Override
+    public synchronized List<Signalement> parVehicule(String vehicule) {
+        return parId.values().stream()
+                .filter(s -> s.vehicule().equals(vehicule))
+                .toList();
     }
 
     @Override
