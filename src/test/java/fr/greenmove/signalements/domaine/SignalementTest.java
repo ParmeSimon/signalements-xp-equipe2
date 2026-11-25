@@ -98,4 +98,36 @@ class SignalementTest {
         assertThat(relache.estLibre()).isTrue();
         assertThat(relache.prisPar()).isNull();
     }
+
+    @Test
+    void un_nouveau_signalement_est_ouvert() {
+        Signalement signalement = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT);
+
+        assertThat(signalement.clos()).isFalse();
+        assertThat(signalement.estOuvert()).isTrue();
+        assertThat(signalement.commentaireCloture()).isNull();
+    }
+
+    @Test
+    void clore_un_signalement_le_ferme_avec_le_commentaire_et_le_technicien() {
+        Signalement signalement = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT);
+
+        Signalement clos = signalement.clore("Bob", "  Plaquettes changées  ");
+
+        assertThat(clos.clos()).isTrue();
+        assertThat(clos.estOuvert()).isFalse();
+        assertThat(clos.prisPar()).isEqualTo("Bob");
+        assertThat(clos.commentaireCloture()).isEqualTo("Plaquettes changées");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   ", "\t\n"})
+    void le_commentaire_de_cloture_est_obligatoire(String commentaireInvalide) {
+        Signalement signalement = new Signalement("1", "V-0412", Categorie.FREINS, "", MAINTENANT);
+
+        assertThatThrownBy(() -> signalement.clore("Bob", commentaireInvalide))
+                .isInstanceOf(SignalementInvalide.class)
+                .hasMessage("Le commentaire de réparation est obligatoire");
+    }
 }
