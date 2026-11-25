@@ -18,6 +18,7 @@ public class VoirSignalementsOuverts {
 
     public List<Signalement> lister() {
         return signalements.tous().stream()
+                .filter(s -> !s.clos())
                 .sorted(Comparator
                         .comparingInt((Signalement s) -> priorite(s.gravite()))
                         .thenComparing(Signalement::signaleLe))
