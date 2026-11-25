@@ -8,6 +8,7 @@ import fr.greenmove.signalements.domaine.Categorie;
 import fr.greenmove.signalements.domaine.Signalement;
 import fr.greenmove.signalements.domaine.SignalementInvalide;
 import fr.greenmove.signalements.domaine.Signalements;
+import fr.greenmove.signalements.application.ConsulterHistoriqueVehicule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,17 +32,20 @@ public class SignalementController {
     private final PrendreEnChargeSignalement prendreEnChargeSignalement;
     private final RemettreEnService remettreEnService;
     private final Signalements signalements;
+    private final ConsulterHistoriqueVehicule consulterHistoriqueVehicule;
 
     @Autowired
     public SignalementController(SignalerIncident signalerIncident,
                                  VoirSignalementsOuverts voirSignalementsOuverts,
                                  PrendreEnChargeSignalement prendreEnChargeSignalement,
                                  RemettreEnService remettreEnService,
+                                 ConsulterHistoriqueVehicule consulterHistoriqueVehicule,
                                  Signalements signalements) {
         this.signalerIncident = signalerIncident;
         this.voirSignalementsOuverts = voirSignalementsOuverts;
         this.prendreEnChargeSignalement = prendreEnChargeSignalement;
         this.remettreEnService = remettreEnService;
+        this.consulterHistoriqueVehicule = consulterHistoriqueVehicule;
         this.signalements = signalements;
     }
 
@@ -89,6 +93,12 @@ public class SignalementController {
     @GetMapping("/{id}")
     public ResponseEntity<SignalementVue> parId(@PathVariable String id) {
         return ResponseEntity.of(signalements.parId(id).map(SignalementVue::de));
+    }
+
+    /** S12 – L'historique des incidents d'un véhicule, du plus récent au plus ancien. */
+    @GetMapping("/vehicules/{vehicule}/historique")
+    public List<SignalementVue> historique(@PathVariable String vehicule) {
+        return consulterHistoriqueVehicule.de(vehicule).stream().map(SignalementVue::de).toList();
     }
 
     /** S4 : un technicien prend en charge le signalement. */

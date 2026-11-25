@@ -1,9 +1,6 @@
 package fr.greenmove.signalements.infrastructure;
 
-import fr.greenmove.signalements.application.PrendreEnChargeSignalement;
-import fr.greenmove.signalements.application.RemettreEnService;
-import fr.greenmove.signalements.application.SignalerIncident;
-import fr.greenmove.signalements.application.VoirSignalementsOuverts;
+import fr.greenmove.signalements.application.*;
 import fr.greenmove.signalements.domaine.Notifications;
 import fr.greenmove.signalements.domaine.Pool;
 import fr.greenmove.signalements.domaine.Signalements;
@@ -54,5 +51,10 @@ public class ConfigurationSignalements {
     @Bean
     RemettreEnService remettreEnService(Signalements signalements, Pool pool) {
         return new RemettreEnService(signalements, pool);
+    }
+
+    @Bean
+    ConsulterHistoriqueVehicule consulterHistoriqueVehicule(Signalements signalements) {
+        return new ConsulterHistoriqueVehicule(signalements);
     }
 }
