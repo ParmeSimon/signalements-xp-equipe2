@@ -20,8 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PrendreEnChargeSteps {
 
     private final SignalementsEnMemoire signalements = new SignalementsEnMemoire();
-    private final SignalerIncident signalerIncident = new SignalerIncident(
-            signalements, Clock.fixed(Instant.parse("2026-11-24T09:00:00Z"), ZoneOffset.UTC));
+    private final SignalerIncident signalerIncident = new SignalerIncident(signalements, Clock.fixed(Instant.parse("2026-11-24T09:00:00Z"), ZoneOffset.UTC));
     private final PrendreEnChargeSignalement prendreEnCharge = new PrendreEnChargeSignalement(signalements);
 
     private String idDuSignalement;

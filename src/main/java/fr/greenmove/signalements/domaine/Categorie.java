@@ -10,6 +10,7 @@ public enum Categorie {
     FREINS(Gravite.BLOQUANT),
     DIRECTION(Gravite.BLOQUANT),
     BATTERIE(Gravite.BLOQUANT),
+    RAPPEL_CONSTRUCTEUR(Gravite.BLOQUANT),
     ECLAIRAGE(Gravite.GENANT),
     PNEU(Gravite.GENANT),
     BEQUILLE(Gravite.GENANT),

@@ -47,7 +47,7 @@ public class ConsulterHistoriqueVehiculeTest {
 
     @Test
     void un_vehicule_sans_incident_a_un_historique_vide(){
-        assertTrue(signalements.parVehicule("V-0999").isEmpty());
+        assertTrue(consulterHistorique.de("V-0100").isEmpty());
     }
 
     @Test
