@@ -18,7 +18,7 @@ public class ConsulterHistoriqueVehicule {
     public List<Signalement> de(String vehicule) {
         return signalements.tous().stream()                                   // tous les signalements
                 .filter(s -> s.vehicule().equals(vehicule))
-                .sorted(Comparator.comparing(Signalement::signaleLe).reversed())
+                //.sorted(Comparator.comparing(Signalement::signaleLe).reversed())
                 .toList();
     }
 }
