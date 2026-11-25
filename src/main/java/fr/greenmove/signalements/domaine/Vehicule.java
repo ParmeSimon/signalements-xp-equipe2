@@ -33,6 +33,11 @@ public abstract sealed class Vehicule permits Velo, Trottinette {
         this.updatedAt = maintenant;
     }
 
+    public void reactiver(Instant maintenant) {
+        this.active = true;
+        this.updatedAt = maintenant;
+    }
+
     public boolean estEnCoursDUtilisation() { return trajet != null && trajet.estEnCours(); }
 
     public String numero() { return numero; }
