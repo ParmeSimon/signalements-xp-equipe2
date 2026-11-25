@@ -78,4 +78,40 @@ class SignalementControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
     }
+
+    @Test
+    void remettre_en_service_un_vehicule_clot_ses_signalements_ouverts() throws Exception {
+        String adresse = signaler("""
+                {"vehicule": "V-0991", "categorie": "freins", "commentaire": "Frein avant HS"}
+                """)
+                .andReturn().getResponse().getHeader("Location");
+
+        mockMvc.perform(post("/signalements/vehicules/V-0991/remise-en-service")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"technicien": "Bob", "commentaire": "Plaquettes remplacées"}
+                                """))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(adresse))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.clos").value(true))
+                .andExpect(jsonPath("$.prisPar").value("Bob"))
+                .andExpect(jsonPath("$.commentaireCloture").value("Plaquettes remplacées"));
+
+        mockMvc.perform(get("/signalements/ouverts"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[?(@.vehicule == 'V-0991')]").isEmpty());
+    }
+
+    @Test
+    void remettre_en_service_sans_commentaire_renvoie_400() throws Exception {
+        mockMvc.perform(post("/signalements/vehicules/V-0992/remise-en-service")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"technicien": "Bob", "commentaire": ""}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.erreur").value("Le commentaire de réparation est obligatoire"));
+    }
 }
